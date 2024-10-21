@@ -1,10 +1,11 @@
 describe('Caso de Uso 1 - Registro de Parcelas', () => {
 
-  // Datos de prueba para Pairwise Testing con valores realistas y únicos
+  // Generar datos de prueba con valores realistas y únicos
+  const timestamp = Date.now(); // Generar timestamp para unicidad
   const combinacionesDeDatos = [
-    { nombre: 'Parcela A', longitud: '-70.6483', latitud: '-33.4569', ubicacion: 'Ubicación Santiago', superficie: '100', longitudDimension: '200', anchura: '300', pendiente: '5', ph: '6.5', humedad: '70', temperatura: '22' },
-    { nombre: 'Parcela B', longitud: '-68.1193', latitud: '-38.9392', ubicacion: 'Ubicación Neuquén', superficie: '150', longitudDimension: '250', anchura: '350', pendiente: '10', ph: '5.5', humedad: '60', temperatura: '20' },
-    { nombre: 'Parcela C', longitud: '-63.6167', latitud: '-38.4161', ubicacion: 'Ubicación Buenos Aires', superficie: '200', longitudDimension: '300', anchura: '400', pendiente: '15', ph: '7.0', humedad: '80', temperatura: '24' },
+    { nombre: `Parcela A ${timestamp}`, longitud: '-70.6483', latitud: '-33.4569', ubicacion: `Ubicación Santiago ${timestamp}`, superficie: '100', longitudDimension: '200', anchura: '300', pendiente: '5', ph: '6.5', humedad: '70', temperatura: '22' },
+    { nombre: `Parcela B ${timestamp}`, longitud: '-68.1193', latitud: '-38.9392', ubicacion: `Ubicación Neuquén ${timestamp}`, superficie: '150', longitudDimension: '250', anchura: '350', pendiente: '10', ph: '5.5', humedad: '60', temperatura: '20' },
+    { nombre: `Parcela C ${timestamp}`, longitud: '-63.6167', latitud: '-38.4161', ubicacion: `Ubicación Buenos Aires ${timestamp}`, superficie: '200', longitudDimension: '300', anchura: '400', pendiente: '15', ph: '7.0', humedad: '80', temperatura: '24' },
   ];
 
   combinacionesDeDatos.forEach((datos, index) => {
@@ -23,11 +24,19 @@ describe('Caso de Uso 1 - Registro de Parcelas', () => {
 
       // 3. Rellenar formulario de registro de nueva parcela con valores únicos y realistas
       cy.get('#parcel-form_nombre').type(datos.nombre);
+      
+      // Seleccionar el estado de la parcela
       cy.get('#parcel-form_estado_parcela').click();
       cy.get('.ant-select-item-option-active > .ant-select-item-option-content').click();
+      
+      // Ingresar coordenadas de longitud y latitud
       cy.get('#parcel-form_longitud').clear().type(datos.longitud);
       cy.get('#parcel-form_latitud').clear().type(datos.latitud);
+      
+      // Ingresar la ubicación única
       cy.get('#parcel-form_ubicacion').type(datos.ubicacion);
+      
+      // Ingresar las dimensiones de la parcela
       cy.get('#parcel-form_dimensiones_superficie').type(datos.superficie);
       cy.get('#parcel-form_dimensiones_longitud').type(datos.longitudDimension);
       cy.get('#parcel-form_dimensiones_anchura').type(datos.anchura);
