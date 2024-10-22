@@ -33,7 +33,7 @@ describe('Caso de Uso 5 - Visualización de Listado de Siembras en Parcelas', ()
       contrasena: '1234', 
       rol: 'Operador de Campo', 
       puedeCrear: true, 
-      puedeModificar: false, 
+      puedeModificar: true, 
       puedeConsultar: true 
     },
     // Auditor - solo puede consultar

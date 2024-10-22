@@ -88,6 +88,13 @@ describe('Caso de Uso 2 - Visualización de Listado de Dimensiones de Parcelas',
           .within(() => {
             cy.get('.anticon-edit').should('be.visible'); // Verificar el botón de edición dentro de la fila
           });
+      } else {
+        // Verificar que no haya botón de edición en la primera fila visible
+        cy.get('.ant-table-row')
+          .first() // Tomar la primera fila visible
+          .within(() => {
+            cy.get('.anticon-edit').should('not.exist'); // Verificar que no haya botón de edición dentro de la fila
+          });
       }
 
     });

@@ -89,6 +89,13 @@ describe('Caso de Uso 1 - Visualización de Listado de Parcelas', () => {
           .within(() => {
             cy.get('.anticon-edit').should('be.visible'); // Verificar el botón de edición dentro de la fila
           });
+      } else {
+        // Verificar que el botón de edición esté deshabilitado
+        cy.get('.ant-table-row')
+          .first() // Tomar la primera fila visible
+          .within(() => {
+            cy.get('.anticon-edit').should('not.exist'); // Verificar que el botón de edición no esté presente
+          });
       }
 
     });
