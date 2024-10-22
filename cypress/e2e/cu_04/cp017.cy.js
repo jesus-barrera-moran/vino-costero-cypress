@@ -1,10 +1,11 @@
 describe('Caso de Uso 4 - Creación de un Nuevo Tipo de Uva', () => {
 
   // Generar datos de prueba con valores realistas para Pairwise Testing
+  const timestamp = Date.now(); // Generar timestamp para unicidad
   const combinacionesDeDatos = [
-    { nombre: 'Cabernet Sauvignon', ph: '5', humedad: '25', temperatura: '35', tiempoCosecha: '150', descripcion: 'Uva con cuerpo y sabor robusto' },
-    { nombre: 'Merlot', ph: '6', humedad: '30', temperatura: '28', tiempoCosecha: '120', descripcion: 'Uva suave y aterciopelada' },
-    { nombre: 'Syrah', ph: '7', humedad: '20', temperatura: '32', tiempoCosecha: '140', descripcion: 'Uva con notas especiadas' },
+    { nombre: `Cabernet Sauvignon ${timestamp}`, ph: '5', humedad: '25', temperatura: '35', tiempoCosecha: '150', descripcion: 'Uva con cuerpo y sabor robusto' },
+    { nombre: `Merlot ${timestamp}`, ph: '6', humedad: '30', temperatura: '28', tiempoCosecha: '120', descripcion: 'Uva suave y aterciopelada' },
+    { nombre: `Syrah ${timestamp}`, ph: '7', humedad: '20', temperatura: '32', tiempoCosecha: '140', descripcion: 'Uva con notas especiadas' },
   ];
 
   combinacionesDeDatos.forEach((datos, index) => {
