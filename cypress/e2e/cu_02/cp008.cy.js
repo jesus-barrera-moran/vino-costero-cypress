@@ -1,4 +1,4 @@
-describe('Caso de Uso 1 - Visualización de Listado de Parcelas', () => {
+describe('Caso de Uso 2 - Visualización de Listado de Dimensiones de Parcelas', () => {
 
   const combinacionesDeDatos = [
     // Administrador del Sistema - puede crear, modificar y consultar
@@ -49,7 +49,7 @@ describe('Caso de Uso 1 - Visualización de Listado de Parcelas', () => {
   ];
 
   combinacionesDeDatos.forEach((datos, index) => {
-    it(`Verificación de visualización de parcelas - Iteración ${index + 1}`, () => {
+    it(`Verificación de visualización de dimensiones de parcelas - Iteración ${index + 1}`, () => {
 
       // 1. Inicio de sesión con credenciales del usuario
       cy.visit('https://vino-costero-frontend-st-349319288826.us-central1.run.app/login');
@@ -57,31 +57,30 @@ describe('Caso de Uso 1 - Visualización de Listado de Parcelas', () => {
       cy.get('#login_contrasena').clear().type(datos.contrasena);
       cy.get('.ant-btn > span').click();
 
-      // 2. Acceso al módulo de gestión de parcelas
+      // 2. Acceso al módulo de gestión de dimensiones
       cy.get(':nth-child(2) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Primer clic para abrir el menú
 
-      // Verificar si el rol tiene acceso a crear/modificar parcelas
+      // Verificar si el rol tiene acceso a modificar dimensiones
       if (!datos.puedeConsultar) {
-        // Verificar que el botón para entrar en gestión de parcelas esté deshabilitado y terminar la prueba
-        cy.get(':nth-child(2) > .ant-card > .ant-card-body > .ant-btn')
+        // Verificar que el botón para entrar en gestión de dimensiones esté deshabilitado y terminar la prueba
+        cy.get(':nth-child(3) > .ant-card > .ant-card-body > .ant-btn')
           .should('be.disabled');
         return;
       }
 
       // Si puede modificar, continuar con el flujo normal
-      cy.get(':nth-child(2) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Segundo clic para entrar en gestión de parcelas
+      cy.get(':nth-child(3) > .ant-card > .ant-card-body > .ant-btn').click(); // Segundo clic para entrar en gestión de dimensiones
 
-      // 3. Expandir una fila de la tabla de parcelas
+      // 3. Expandir una fila de la tabla de dimensiones
       cy.get('[data-row-key="44"] > .ant-table-row-expand-icon-cell > .ant-table-row-expand-icon').click();
 
       // 4. Verificación de columnas y secciones
-      cy.get('.ant-table-thead > tr > :nth-child(2)').click().should('be.visible'); // Columna 'Nombre'
-      cy.get('.ant-table-thead > tr > :nth-child(3)').click().should('be.visible'); // Columna 'Estado'
+      cy.get('.ant-table-thead > tr > :nth-child(2)').click().should('be.visible'); // Columna 'Superficie'
+      cy.get('.ant-table-thead > tr > :nth-child(3)').click().should('be.visible'); // Columna 'Longitud'
+      cy.get('.ant-table-thead > tr > :nth-child(4)').click().should('be.visible'); // Columna 'Anchura'
+      cy.get('.ant-table-thead > tr > :nth-child(5)').click().should('be.visible'); // Columna 'Pendiente'
 
-      cy.get('.ant-table-thead > tr > :nth-child(6)').click().should('be.visible'); // Columna 'Dimensiones'
-      cy.get('.ant-table-thead > tr > :nth-child(7)').click().should('be.visible'); // Columna 'Control de Tierra'
-
-      // 5. Verificación de opciones de edición de parcelas
+      // 5. Verificación de opciones de edición de dimensiones
       if (datos.puedeModificar) {
         // Asegurarse de que haya una fila de tabla visible antes de verificar el botón de edición
         cy.get('.ant-table-row')
