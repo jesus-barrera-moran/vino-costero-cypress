@@ -41,8 +41,8 @@ describe('Caso de Uso 2 - Modificación de Dimensiones de Parcela', () => {
       cy.get(':nth-child(2) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Acceder a "Gestión de Parcelas"
       cy.get(':nth-child(3) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Acceder a "Gestión de Dimensiones de Parcelas"
 
-      // 3. Seleccionar una parcela existente para modificar sus dimensiones
-      cy.get('[data-row-key="44"] > :nth-child(7) > .anticon > svg').click(); // Selector para editar dimensiones
+      // 3. Seleccionar la primera parcela existente para modificar sus dimensiones
+      cy.get('.ant-table-row').first().find(':nth-child(7) > .anticon > svg').click(); // Selector para editar dimensiones
 
       // 4. Modificar las dimensiones con valores de la iteración actual
       if (datos.superficie) cy.get('#edit-dimensions_superficie').clear().type(datos.superficie);
@@ -53,9 +53,12 @@ describe('Caso de Uso 2 - Modificación de Dimensiones de Parcela', () => {
       // 5. Guardar las nuevas dimensiones
       cy.get('.ant-btn > span').click();
 
-      // 6. Verificar la notificación de éxito
-      cy.get('.ant-message-custom-content > :nth-child(2)').should('have.text', 'Las dimensiones se han actualizado exitosamente');
-
+      // 6. Verificar la notificación de éxito o error
+      if (datos.esValido) {
+        cy.get('.ant-message-custom-content > :nth-child(2)').should('have.text', 'Las dimensiones se han actualizado exitosamente');
+      } else {
+        cy.get('.ant-message-custom-content > :nth-child(2)').should('have.text', 'Error al actualizar las dimensiones');
+      }
     });
   });
 
