@@ -70,8 +70,12 @@ describe('Caso de Uso 5 - Visualización de Listado de Siembras en Parcelas', ()
       // Si puede consultar, continuar con el flujo normal
       cy.get(':nth-child(4) > .ant-card > .ant-card-body > .ant-btn').click(); // Segundo clic para entrar en gestión de siembras
 
-      // 3. Expandir una fila de la tabla de siembras
-      cy.get('[data-row-key="44"] > .ant-table-row-expand-icon-cell > .ant-table-row-expand-icon').click();
+      // 3. Expandir la primera fila visible de la tabla de siembras
+      cy.get('.ant-table-row')
+        .first() // Tomar la primera fila visible
+        .within(() => {
+          cy.get('.ant-table-row-expand-icon').click(); // Expandir la fila
+        });
 
       // 4. Verificación de columnas y secciones
       cy.get('.ant-table-thead > tr > :nth-child(2)').click().should('be.visible'); // Columna 'Nombre de la Parcela'

@@ -22,7 +22,11 @@ describe('Caso de Uso 5 - Modificación de Siembra en una Parcela', () => {
       cy.get(':nth-child(4) > .ant-card > .ant-card-body > .ant-btn > span').click();
 
       // 3. Seleccionar una siembra existente para modificar
-      cy.get('[data-row-key="44"] > :nth-child(5) > .anticon > svg').click(); // Selector para editar la siembra
+      cy.get('.ant-table-row') // Seleccionar la primera fila de la tabla
+        .first() // Tomar la primera fila visible
+        .within(() => {
+          cy.get(':nth-child(5) > .anticon > svg').click(); // Hacer clic en el ícono de edición
+        });
 
       // 4. Seleccionar cualquier fecha de plantación disponible
       cy.get('#create-sowing_fecha_plantacion').click();
