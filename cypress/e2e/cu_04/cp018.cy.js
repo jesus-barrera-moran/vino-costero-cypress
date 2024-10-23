@@ -21,8 +21,12 @@ describe('Caso de Uso 4 - Modificación de un Tipo de Uva', () => {
       cy.get(':nth-child(2) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Acceder a "Gestión de Parcelas"
       cy.get(':nth-child(5) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Acceder a "Gestión de Tipos de Uvas"
 
-      // 3. Seleccionar un tipo de uva existente para modificar
-      cy.get('[data-row-key="30"] > :nth-child(5) > .anticon > svg').click(); // Selector para editar el tipo de uva
+      // 3. Seleccionar el primer tipo de uva visible para modificar
+      cy.get('.ant-table-row') // Seleccionar la primera fila de la tabla de tipos de uva
+        .first() // Tomar la primera fila visible
+        .within(() => {
+          cy.get('.anticon-edit').click(); // Hacer clic en el ícono de edición
+        });
 
       // 4. Modificar los campos del formulario con valores de la iteración actual
       cy.get('#create-edit-grape-type_nombre').clear().type(datos.nombre);

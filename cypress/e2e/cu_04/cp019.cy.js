@@ -19,7 +19,7 @@ describe('Caso de Uso 4 - Visualización de Listado de Tipos de Uvas', () => {
       puedeModificar: true, 
       puedeConsultar: true 
     },
-    // Supervisor de Campo - puede crear, modificar y consultar
+    // Supervisor de Campo - no puede crear ni modificar, solo consultar
     { 
       usuario: 'supervisor', 
       contrasena: '1234', 
@@ -71,8 +71,12 @@ describe('Caso de Uso 4 - Visualización de Listado de Tipos de Uvas', () => {
       // Si puede consultar, continuar con el flujo normal
       cy.get(':nth-child(5) > .ant-card > .ant-card-body > .ant-btn').click(); // Segundo clic para entrar en gestión de tipos de uvas
 
-      // 3. Expandir una fila de la tabla de tipos de uvas
-      cy.get('[data-row-key="33"] > .ant-table-row-expand-icon-cell > .ant-table-row-expand-icon').click();
+      // 3. Expandir la primera fila visible de la tabla de tipos de uvas
+      cy.get('.ant-table-row') // Seleccionar la primera fila de la tabla
+        .first() // Tomar la primera fila visible
+        .within(() => {
+          cy.get('.ant-table-row-expand-icon').click(); // Hacer clic en el ícono de expansión
+        });
 
       // 4. Verificación de columnas y secciones
       cy.get('.ant-table-thead > tr > :nth-child(2)').click().should('be.visible'); // Columna 'Nombre de la Uva'
