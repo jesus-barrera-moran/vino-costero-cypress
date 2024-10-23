@@ -1,7 +1,7 @@
 describe('Caso de Uso 1 - Registro de Parcelas', () => {
 
     const timestamp = Date.now(); // Generar timestamp para unicidad
-
+  
     const combinacionesDeDatos = [
       // Iteración 1: Valores fuera de rango para dimensiones y control de tierra
       { 
@@ -20,17 +20,17 @@ describe('Caso de Uso 1 - Registro de Parcelas', () => {
       },
       // Iteración 2: Campos faltantes (dejan campos vacíos)
       { 
-        nombre: `Parcela Invalida 2 ${timestamp}`, // Nombre con timestamp
+        nombre: `Parcela Invalida 2 ${timestamp}`, 
         longitud: '', // Longitud vacía
         latitud: '', // Latitud vacía
-        ubicacion: `Ubicación Inválida 2 ${timestamp}`, // Ubicación con timestamp
-        superficie: '', // Superficie vacía
-        longitudDimension: '', // Longitud vacía
-        anchura: '', // Anchura vacía
-        pendiente: '', // Pendiente vacía
-        ph: '', // PH vacío
-        humedad: '', // Humedad vacía
-        temperatura: '', // Temperatura vacía
+        ubicacion: `Ubicación Inválida 2 ${timestamp}`, 
+        superficie: '', 
+        longitudDimension: '', 
+        anchura: '', 
+        pendiente: '', 
+        ph: '', 
+        humedad: '', 
+        temperatura: '', 
         esValido: false
       },
       // Iteración 3: Combinación válida (de control)
@@ -71,24 +71,24 @@ describe('Caso de Uso 1 - Registro de Parcelas', () => {
         cy.get('#parcel-form_estado_parcela').click();
         cy.get('.ant-select-item-option-active > .ant-select-item-option-content').click();
         
-        // Ingresar coordenadas de longitud y latitud
-        cy.get('#parcel-form_longitud').clear().type(datos.longitud);
-        cy.get('#parcel-form_latitud').clear().type(datos.latitud);
+        // Ingresar coordenadas de longitud y latitud si existen
+        if (datos.longitud) cy.get('#parcel-form_longitud').clear().type(datos.longitud);
+        if (datos.latitud) cy.get('#parcel-form_latitud').clear().type(datos.latitud);
         
         // Ingresar la ubicación única
-        cy.get('#parcel-form_ubicacion').type(datos.ubicacion);
+        if (datos.ubicacion) cy.get('#parcel-form_ubicacion').type(datos.ubicacion);
         
-        // Ingresar las dimensiones de la parcela
-        cy.get('#parcel-form_dimensiones_superficie').type(datos.superficie);
-        cy.get('#parcel-form_dimensiones_longitud').type(datos.longitudDimension);
-        cy.get('#parcel-form_dimensiones_anchura').type(datos.anchura);
-        cy.get('#parcel-form_dimensiones_pendiente').type(datos.pendiente);
+        // Ingresar las dimensiones de la parcela si existen
+        if (datos.superficie) cy.get('#parcel-form_dimensiones_superficie').type(datos.superficie);
+        if (datos.longitudDimension) cy.get('#parcel-form_dimensiones_longitud').type(datos.longitudDimension);
+        if (datos.anchura) cy.get('#parcel-form_dimensiones_anchura').type(datos.anchura);
+        if (datos.pendiente) cy.get('#parcel-form_dimensiones_pendiente').type(datos.pendiente);
         
         // Expandir el panel de Control de Tierra
         cy.get(':nth-child(2) > .ant-collapse-header > .ant-collapse-header-text').click();
-        cy.get('#parcel-form_control_tierra_ph').type(datos.ph);
-        cy.get('#parcel-form_control_tierra_humedad').type(datos.humedad);
-        cy.get('#parcel-form_control_tierra_temperatura').type(datos.temperatura);
+        if (datos.ph) cy.get('#parcel-form_control_tierra_ph').type(datos.ph);
+        if (datos.humedad) cy.get('#parcel-form_control_tierra_humedad').type(datos.humedad);
+        if (datos.temperatura) cy.get('#parcel-form_control_tierra_temperatura').type(datos.temperatura);
   
         // Guardar el registro de la nueva parcela
         cy.get('.ant-btn').click();
@@ -98,9 +98,9 @@ describe('Caso de Uso 1 - Registro de Parcelas', () => {
           cy.get('.ant-message-custom-content > :nth-child(2)').should('have.text', 'La parcela ha sido registrada exitosamente');
         } else {
           // Verificar la notificación de error
-          cy.get('.ant-message-custom-content > :nth-child(2)').should('have.text', 'Error al registrar la parcela');
+          cy.get('.ant-message-custom-content > :nth-child(2)').should('have.text', 'Hubo un error al procesar la solicitud');
         }
-
+  
       });
     });
   
