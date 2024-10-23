@@ -21,7 +21,11 @@ describe('Caso de Uso 3 - Creación de Control de Tierra', () => {
       cy.get(':nth-child(1) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Acceder a "Controles de Tierra"
 
       // 3. Seleccionar una parcela existente para crear un nuevo control de tierra
-      cy.get('[data-row-key="38"] > :nth-child(5) > .anticon > svg').click(); // Selector para crear un control de tierra
+      cy.get('.ant-table-row') // Seleccionar la primera fila de la tabla de parcelas
+        .first() // Tomar la primera fila visible
+        .within(() => {
+          cy.get('.anticon-plus').click(); // Clic en el botón para crear un control de tierra
+        });
 
       // 4. Rellenar el formulario de control de tierra con valores de la iteración actual
       cy.get('#register-soil-control_ph').clear().type(datos.ph);

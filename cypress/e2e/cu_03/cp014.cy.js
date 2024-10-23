@@ -10,7 +10,7 @@ describe('Caso de Uso 3 - Visualización del Historial de Controles de Tierra de
       puedeModificar: true, 
       puedeConsultar: true 
     },
-    // Gestor de Producción - puede modificar y consultar
+    // Gestor de Producción - no puede consultar
     { 
       usuario: 'gestor', 
       contrasena: '1234', 
@@ -19,7 +19,7 @@ describe('Caso de Uso 3 - Visualización del Historial de Controles de Tierra de
       puedeModificar: false, 
       puedeConsultar: false 
     },
-    // Supervisor de Campo - puede consultar pero no puede modificar
+    // Supervisor de Campo - puede crear, modificar y consultar
     { 
       usuario: 'supervisor', 
       contrasena: '1234', 
@@ -28,7 +28,7 @@ describe('Caso de Uso 3 - Visualización del Historial de Controles de Tierra de
       puedeModificar: true, 
       puedeConsultar: true 
     },
-    // Operador de Campo - solo puede consultar
+    // Operador de Campo - no puede consultar
     { 
       usuario: 'operador', 
       contrasena: '1234', 
@@ -71,8 +71,12 @@ describe('Caso de Uso 3 - Visualización del Historial de Controles de Tierra de
       // Si puede consultar, continuar con el flujo normal
       cy.get(':nth-child(1) > .ant-card > .ant-card-body > .ant-btn').click(); // Segundo clic para entrar en gestión de controles de tierra
 
-      // 3. Expandir una fila de la tabla de controles de tierra
-      cy.get('[data-row-key="44"] > .ant-table-row-expand-icon-cell > .ant-table-row-expand-icon').click();
+      // 3. Expandir la primera fila de la tabla de controles de tierra
+      cy.get('.ant-table-row') // Seleccionar la primera fila de la tabla
+        .first() // Tomar la primera fila visible
+        .within(() => {
+          cy.get('.ant-table-row-expand-icon').click(); // Expandir la fila
+        });
 
       // 4. Expandir la sección del historial de controles de tierra
       cy.get('[style="background-color: rgb(255, 255, 255); border-radius: 5px;"] > .ant-collapse-header').click();
@@ -81,32 +85,6 @@ describe('Caso de Uso 3 - Visualización del Historial de Controles de Tierra de
       // 5. Verificación de detalles del historial de controles de tierra
       cy.get('.ant-timeline-item-content > .ant-collapse > .ant-collapse-item > .ant-collapse-header')
         .should('be.visible'); // Verificar que el historial de controles esté visible
-
-      // // 6. Verificación de opciones de edición de controles de tierra
-      // if (datos.puedeModificar) {
-      //   // Verificar el botón de edición en el primer registro del historial
-      //   cy.get('.ant-timeline-item-content')
-      //     .first() // Tomar el primer registro del historial
-      //     .within(() => {
-      //       cy.get('.anticon-edit').should('be.visible'); // Verificar el botón de edición dentro del registro
-      //     });
-      // } else {
-      //   // Verificar que el botón de edición no esté presente en el historial cuando no se puede modificar
-      //   cy.get('.ant-timeline-item-content')
-      //     .first() // Tomar el primer registro del historial
-      //     .within(() => {
-      //       cy.get('.anticon-edit').should('not.exist'); // Fallar si el botón de edición está presente
-      //     });
-      // }
-
-      // // 7. Verificación de opción de crear control de tierra
-      // if (datos.puedeCrear) {
-      //   // Verificar si el botón de crear nuevo control de tierra está visible
-      //   cy.get('.ant-btn-create-soil-control').should('be.visible'); // Botón de creación de nuevo control de tierra
-      // } else {
-      //   // Verificar que el botón de creación no esté visible para los roles sin acceso a crear
-      //   cy.get('.ant-btn-create-soil-control').should('not.exist');
-      // }
 
     });
   });
