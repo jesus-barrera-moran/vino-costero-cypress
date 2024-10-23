@@ -21,8 +21,12 @@ describe('Caso de Uso 1 - Modificación de Parcelas', () => {
       cy.get(':nth-child(2) > .ant-card > .ant-card-body > .ant-btn > span').click();
       cy.get(':nth-child(2) > .ant-card > .ant-card-body > .ant-btn > span').click();
 
-      // 3. Seleccionar una parcela existente para modificar
-      cy.get('[data-row-key] .anticon-edit').first().click(); // Selector para modificar la parcela
+      // 3. Seleccionar la primera fila de la tabla de parcelas para modificar
+      cy.get('.ant-table-row')
+        .first() // Selección dinámica de la primera fila
+        .within(() => {
+          cy.get('.anticon-edit').click(); // Clic en el botón de editar dentro de la fila
+        });
 
       // 4. Modificar los campos de la parcela con valores únicos y realistas
       cy.get('#parcel-form_nombre').clear().type(datos.nombre);

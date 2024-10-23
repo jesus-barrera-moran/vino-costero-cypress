@@ -71,13 +71,16 @@ describe('Caso de Uso 1 - Visualización de Listado de Parcelas', () => {
       // Si puede modificar, continuar con el flujo normal
       cy.get(':nth-child(2) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Segundo clic para entrar en gestión de parcelas
 
-      // 3. Expandir una fila de la tabla de parcelas
-      cy.get('[data-row-key="44"] > .ant-table-row-expand-icon-cell > .ant-table-row-expand-icon').click();
+      // 3. Expandir la primera fila de la tabla de parcelas
+      cy.get('.ant-table-row')
+        .first() // Seleccionar la primera fila visible
+        .within(() => {
+          cy.get('.ant-table-row-expand-icon').click(); // Expandir la fila
+        });
 
       // 4. Verificación de columnas y secciones
       cy.get('.ant-table-thead > tr > :nth-child(2)').click().should('be.visible'); // Columna 'Nombre'
       cy.get('.ant-table-thead > tr > :nth-child(3)').click().should('be.visible'); // Columna 'Estado'
-
       cy.get('.ant-table-thead > tr > :nth-child(6)').click().should('be.visible'); // Columna 'Dimensiones'
       cy.get('.ant-table-thead > tr > :nth-child(7)').click().should('be.visible'); // Columna 'Control de Tierra'
 
