@@ -21,8 +21,12 @@ describe('Caso de Uso 2 - Modificación de Dimensiones de Parcela', () => {
       cy.get(':nth-child(2) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Acceder a "Gestión de Parcelas"
       cy.get(':nth-child(3) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Acceder a "Gestión de Dimensiones de Parcelas"
 
-      // 3. Seleccionar una parcela existente para modificar sus dimensiones
-      cy.get('[data-row-key="38"] > :nth-child(7) > .anticon > svg').click(); // Selector para editar dimensiones
+      // 3. Seleccionar la primera fila de la tabla de dimensiones para modificar
+      cy.get('.ant-table-row')
+        .first() // Selección dinámica de la primera fila
+        .within(() => {
+          cy.get(':nth-child(7) > .anticon > svg').click(); // Clic en el botón de editar dentro de la fila
+        });
 
       // 4. Modificar las dimensiones con valores de la iteración actual
       cy.get('#edit-dimensions_superficie').clear().type(datos.superficie);

@@ -71,8 +71,12 @@ describe('Caso de Uso 2 - Visualización de Listado de Dimensiones de Parcelas',
       // Si puede modificar, continuar con el flujo normal
       cy.get(':nth-child(3) > .ant-card > .ant-card-body > .ant-btn').click(); // Segundo clic para entrar en gestión de dimensiones
 
-      // 3. Expandir una fila de la tabla de dimensiones
-      cy.get('[data-row-key="44"] > .ant-table-row-expand-icon-cell > .ant-table-row-expand-icon').click();
+      // 3. Expandir la primera fila de la tabla de dimensiones
+      cy.get('.ant-table-row')
+        .first() // Selección dinámica de la primera fila
+        .within(() => {
+          cy.get('.ant-table-row-expand-icon').click(); // Clic en el botón de expandir dentro de la fila
+        });
 
       // 4. Verificación de columnas y secciones
       cy.get('.ant-table-thead > tr > :nth-child(2)').click().should('be.visible'); // Columna 'Superficie'
