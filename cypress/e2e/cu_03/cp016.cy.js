@@ -43,6 +43,11 @@ describe('Caso de Uso 3 - Creación de Control de Tierra', () => {
       // 3. Seleccionar la primera parcela para crear un nuevo control de tierra
       cy.get('.ant-table-row').first().find(':nth-child(5) > .anticon > svg').click(); // Selector para crear un control de tierra
 
+      cy.get('#register-soil-control_ph').clear();
+      cy.get('#register-soil-control_humedad').clear();
+      cy.get('#register-soil-control_temperatura').clear();
+      cy.get('#register-soil-control_observaciones').clear();
+
       // 4. Rellenar el formulario de control de tierra con valores de la iteración actual
       if (datos.ph) cy.get('#register-soil-control_ph').clear().type(datos.ph);
       if (datos.humedad) cy.get('#register-soil-control_humedad').clear().type(datos.humedad);
