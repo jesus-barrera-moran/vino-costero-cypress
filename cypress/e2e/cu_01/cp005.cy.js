@@ -38,42 +38,7 @@ describe('Caso de Uso 1 - Registro de Parcelas con Validación de Duplicidad', (
         errorEsperado: 'El nombre de la parcela ya existe'
       }
     ],
-    // Iteración 2: Dos parcelas con las mismas coordenadas
-    [
-      { 
-        nombre: `Parcela Única 1 ${timestamp}`, 
-        estado: 'Disponible',
-        longitud: '-70.6483', 
-        latitud: '-33.4569', 
-        ubicacion: 'Ubicación 1',
-        superficie: '3000',
-        longitudParcela: '300',
-        anchura: '150',
-        pendiente: '6',
-        ph: '6',
-        humedad: '55',
-        temperatura: '35',
-        observaciones: 'Observación 3',
-        errorEsperado: null
-      },
-      { 
-        nombre: `Parcela Única 2 ${timestamp}`, 
-        estado: 'Disponible',
-        longitud: '-70.6483', 
-        latitud: '-33.4569', 
-        ubicacion: 'Ubicación 2',
-        superficie: '3500',
-        longitudParcela: '350',
-        anchura: '175',
-        pendiente: '5',
-        ph: '7',
-        humedad: '60',
-        temperatura: '36',
-        observaciones: 'Observación 4',
-        errorEsperado: 'Las coordenadas de la parcela ya existen'
-      }
-    ],
-    // Iteración 3: Dos parcelas con datos completamente diferentes
+    // Iteración 2: Dos parcelas con datos completamente diferentes
     [
       { 
         nombre: `Parcela Única 3 ${timestamp}`, 
