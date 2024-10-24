@@ -44,6 +44,11 @@ describe('Caso de Uso 2 - Modificación de Dimensiones de Parcela', () => {
       // 3. Seleccionar la primera parcela existente para modificar sus dimensiones
       cy.get('.ant-table-row').first().find(':nth-child(7) > .anticon > svg').click(); // Selector para editar dimensiones
 
+      cy.get('#edit-dimensions_superficie').clear();
+      cy.get('#edit-dimensions_longitud').clear();
+      cy.get('#edit-dimensions_anchura').clear();
+      cy.get('#edit-dimensions_pendiente').clear();
+
       // 4. Modificar las dimensiones con valores de la iteración actual
       if (datos.superficie) cy.get('#edit-dimensions_superficie').clear().type(datos.superficie);
       if (datos.longitud) cy.get('#edit-dimensions_longitud').clear().type(datos.longitud);
