@@ -56,11 +56,13 @@ describe('Caso de Uso 5 - Creación de Siembra en una Parcela', () => {
       }
 
       // 7. Ingresar la cantidad de plantas sembradas si está presente
+      cy.get('#create-sowing_cantidad_plantas').clear();
       if (datos.cantidadPlantas) {
         cy.get('#create-sowing_cantidad_plantas').clear().type(datos.cantidadPlantas);
       }
 
       // 8. Ingresar la técnica de siembra si está presente
+      cy.get('#create-sowing_tecnica_siembra').clear();
       if (datos.tecnica) {
         cy.get('#create-sowing_tecnica_siembra').clear().type(datos.tecnica);
       }
