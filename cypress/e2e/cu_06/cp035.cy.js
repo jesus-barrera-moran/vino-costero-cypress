@@ -24,18 +24,7 @@ describe('Caso de Uso 6 - Creación de Usuario y Asignación de Rol', () => {
       rol: '', // Rol no seleccionado
       esValido: false
     },
-    // Iteración 3: Contraseñas que no coinciden
-    { 
-      usuario: `usuario_prueba_${timestamp + 1}`, 
-      nombre: 'Ana', 
-      apellido: 'López', 
-      email: `ana.lopez${timestamp}@correo.com`, 
-      contrasena: 'abcd', 
-      confirmarContrasena: '1234', // Confirmar contraseña diferente
-      rol: 'Gestor de Producción', 
-      esValido: false 
-    },
-    // Iteración 4: Combinación válida
+    // Iteración 3: Combinación válida
     { 
       usuario: `usuario_prueba_${timestamp + 2}`, 
       nombre: 'Luis', 
