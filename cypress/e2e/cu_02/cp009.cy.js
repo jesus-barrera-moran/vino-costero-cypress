@@ -1,91 +1,69 @@
-describe('Caso de Uso 2 - Visualización del Historial de Registros de Dimensiones de una Parcela', () => {
+describe('Caso de Uso 2 - Modificación de Dimensiones de Parcela', () => {
 
+  // Generar datos de prueba con valores realistas para Pairwise Testing
   const combinacionesDeDatos = [
-    // Administrador del Sistema - puede crear, modificar y consultar
+    // Iteración 1: Valores fuera de rango para dimensiones
     { 
-      usuario: 'admin', 
-      contrasena: '1234', 
-      rol: 'Administrador del Sistema', 
-      puedeCrear: true, 
-      puedeModificar: true, 
-      puedeConsultar: true 
+      superficie: '-100', // Superficie negativa
+      longitud: '-200', // Longitud negativa
+      anchura: '500', 
+      pendiente: '105', // Pendiente mayor al 100%
+      esValido: false
     },
-    // Gestor de Producción - no puede crear ni modificar
+    // Iteración 2: Campos faltantes (dejan campos vacíos)
     { 
-      usuario: 'gestor', 
-      contrasena: '1234', 
-      rol: 'Gestor de Producción', 
-      puedeCrear: false, 
-      puedeModificar: false, 
-      puedeConsultar: false 
+      superficie: '', // Superficie vacía
+      longitud: '', // Longitud vacía
+      anchura: '', // Anchura vacía
+      pendiente: '', // Pendiente vacía
+      esValido: false
     },
-    // Supervisor de Campo - puede crear, modificar y consultar
+    // Iteración 3: Combinación válida (de control)
     { 
-      usuario: 'supervisor', 
-      contrasena: '1234', 
-      rol: 'Supervisor de Campo', 
-      puedeCrear: true, 
-      puedeModificar: true, 
-      puedeConsultar: true 
-    },
-    // Operador de Campo - no puede crear ni modificar, solo consultar
-    { 
-      usuario: 'operador', 
-      contrasena: '1234', 
-      rol: 'Operador de Campo', 
-      puedeCrear: false, 
-      puedeModificar: false, 
-      puedeConsultar: false 
-    },
-    // Auditor - solo puede consultar
-    { 
-      usuario: 'auditor', 
-      contrasena: '1234', 
-      rol: 'Auditor', 
-      puedeCrear: false, 
-      puedeModificar: false, 
-      puedeConsultar: true 
-    },
-  ];  
+      superficie: '150', 
+      longitud: '250', 
+      anchura: '350', 
+      pendiente: '12',
+      esValido: true
+    }
+  ];
 
   combinacionesDeDatos.forEach((datos, index) => {
-    it(`Verificación de visualización del historial de dimensiones de parcelas - Iteración ${index + 1}`, () => {
+    it(`Modificar dimensiones de una parcela existente - Iteración ${index + 1}`, () => {
 
-      // 1. Inicio de sesión con credenciales del usuario
+      // 1. Inicio de sesión
       cy.visit('https://vino-costero-frontend-st-349319288826.us-central1.run.app/login');
-      cy.get('#login_usuario').clear().type(datos.usuario);
-      cy.get('#login_contrasena').clear().type(datos.contrasena);
+      cy.get('#login_usuario').type('admin');
+      cy.get('#login_contrasena').type('1234');
       cy.get('.ant-btn > span').click();
 
-      // 2. Acceso al módulo de gestión de dimensiones de parcelas
-      cy.get(':nth-child(2) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Primer clic para abrir el menú
+      // 2. Acceso al módulo de gestión de parcelas y luego al de dimensiones
+      cy.get(':nth-child(2) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Acceder a "Gestión de Parcelas"
+      cy.get(':nth-child(3) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Acceder a "Gestión de Dimensiones de Parcelas"
 
-      // Verificar si el rol tiene acceso a consultar dimensiones
-      if (!datos.puedeConsultar) {
-        // Verificar que el botón para entrar en gestión de dimensiones esté deshabilitado y terminar la prueba
-        cy.get(':nth-child(3) > .ant-card > .ant-card-body > .ant-btn')
-          .should('be.disabled');
-        return;
+      // 3. Seleccionar la primera parcela existente para modificar sus dimensiones
+      cy.get('.ant-table-row').first().find(':nth-child(7) > .anticon > svg').click(); // Selector para editar dimensiones
+
+      cy.get('#edit-dimensions_superficie').clear();
+      cy.get('#edit-dimensions_longitud').clear();
+      cy.get('#edit-dimensions_anchura').clear();
+      cy.get('#edit-dimensions_pendiente').clear();
+
+      // 4. Modificar las dimensiones con valores de la iteración actual
+      if (datos.superficie) cy.get('#edit-dimensions_superficie').clear().type(datos.superficie);
+      if (datos.longitud) cy.get('#edit-dimensions_longitud').clear().type(datos.longitud);
+      if (datos.anchura) cy.get('#edit-dimensions_anchura').clear().type(datos.anchura);
+      if (datos.pendiente) cy.get('#edit-dimensions_pendiente').clear().type(datos.pendiente);
+
+      // 5. Guardar las nuevas dimensiones
+      cy.get('.ant-btn > span').click();
+
+      // 6. Verificar la notificación de éxito o error
+      if (datos.esValido) {
+        cy.get('.ant-message-custom-content > :nth-child(2)').should('have.text', 'Las dimensiones se han actualizado exitosamente');
       } else {
-        // Si puede consultar, continuar con el flujo normal
-        cy.get(':nth-child(3) > .ant-card > .ant-card-body > .ant-btn').click(); // Segundo clic para entrar en gestión de dimensiones
+        cy.get('.ant-message-custom-content > :nth-child(2)').should('have.text', 'Error al actualizar las dimensiones');
       }
-
-      // 3. Expandir la primera fila de la tabla de dimensiones
-      cy.get('.ant-table-row')
-        .first() // Selección dinámica de la primera fila
-        .within(() => {
-          cy.get('.ant-table-row-expand-icon').click(); // Clic en el botón de expandir dentro de la fila
-        });
-
-      // 4. Expandir la sección del historial de dimensiones
-      cy.get(':nth-child(2) > .ant-collapse-header').click(); // Expandir la sección de historial de dimensiones
-      cy.get('[aria-expanded="true"] > .ant-collapse-header-text').should('be.visible'); // Verificar que se expanda correctamente
-
-      // 5. Verificación de detalles del historial de dimensiones
-      cy.get('.ant-timeline-item-content > .ant-collapse > .ant-collapse-item > .ant-collapse-header')
-        .should('be.visible'); // Verificar que el historial esté visible
-
     });
   });
 
