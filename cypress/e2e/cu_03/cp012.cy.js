@@ -1,43 +1,90 @@
-describe('Caso de Uso 3 - Creación de Control de Tierra', () => {
+describe('Caso de Uso 3 - Visualización del Historial de Controles de Tierra de una Parcela', () => {
 
-  // Generar datos de prueba con valores realistas para Pairwise Testing
   const combinacionesDeDatos = [
-    { ph: '5', humedad: '35', temperatura: '40', observaciones: 'Control inicial' },
-    { ph: '6', humedad: '45', temperatura: '30', observaciones: 'Condiciones normales' },
-    { ph: '7', humedad: '50', temperatura: '25', observaciones: 'Nivel óptimo de humedad' },
+    // Administrador del Sistema - puede crear, modificar y consultar
+    { 
+      usuario: 'admin', 
+      contrasena: '1234', 
+      rol: 'Administrador del Sistema', 
+      puedeCrear: true, 
+      puedeModificar: true, 
+      puedeConsultar: true 
+    },
+    // Gestor de Producción - no puede consultar
+    { 
+      usuario: 'gestor', 
+      contrasena: '1234', 
+      rol: 'Gestor de Producción', 
+      puedeCrear: false, 
+      puedeModificar: false, 
+      puedeConsultar: false 
+    },
+    // Supervisor de Campo - puede crear, modificar y consultar
+    { 
+      usuario: 'supervisor', 
+      contrasena: '1234', 
+      rol: 'Supervisor de Campo', 
+      puedeCrear: true, 
+      puedeModificar: true, 
+      puedeConsultar: true 
+    },
+    // Operador de Campo - no puede consultar
+    { 
+      usuario: 'operador', 
+      contrasena: '1234', 
+      rol: 'Operador de Campo', 
+      puedeCrear: false, 
+      puedeModificar: false, 
+      puedeConsultar: false 
+    },
+    // Auditor - solo puede consultar
+    { 
+      usuario: 'auditor', 
+      contrasena: '1234', 
+      rol: 'Auditor', 
+      puedeCrear: false, 
+      puedeModificar: false, 
+      puedeConsultar: true 
+    },
   ];
 
   combinacionesDeDatos.forEach((datos, index) => {
-    it(`Crear un nuevo control de tierra - Iteración ${index + 1}`, () => {
+    it(`Verificación del historial de controles de tierra - Iteración ${index + 1}`, () => {
 
-      // 1. Inicio de sesión
+      // 1. Inicio de sesión con credenciales del usuario
       cy.visit('https://vino-costero-frontend-st-349319288826.us-central1.run.app/login');
-      cy.get('#login_usuario').type('admin');
-      cy.get('#login_contrasena').type('1234');
-      cy.get('.ant-btn').click();
+      cy.get('#login_usuario').clear().type(datos.usuario);
+      cy.get('#login_contrasena').clear().type(datos.contrasena);
+      cy.get('.ant-btn > span').click();
 
       // 2. Acceso al módulo de controles de tierra
-      cy.get(':nth-child(2) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Acceder a "Gestión de Parcelas"
-      cy.get(':nth-child(1) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Acceder a "Controles de Tierra"
+      cy.get(':nth-child(2) > .ant-card > .ant-card-body > .ant-btn > span').click(); // Primer clic para abrir el menú
 
-      // 3. Seleccionar una parcela existente para crear un nuevo control de tierra
-      cy.get('.ant-table-row') // Seleccionar la primera fila de la tabla de parcelas
+      // Verificar si el rol tiene acceso a consultar controles de tierra
+      if (!datos.puedeConsultar) {
+        // Verificar que el botón para entrar en gestión de controles de tierra esté deshabilitado y terminar la prueba
+        cy.get(':nth-child(1) > .ant-card > .ant-card-body > .ant-btn')
+          .should('be.disabled');
+        return;
+      }
+
+      // Si puede consultar, continuar con el flujo normal
+      cy.get(':nth-child(1) > .ant-card > .ant-card-body > .ant-btn').click(); // Segundo clic para entrar en gestión de controles de tierra
+
+      // 3. Expandir la primera fila de la tabla de controles de tierra
+      cy.get('.ant-table-row') // Seleccionar la primera fila de la tabla
         .first() // Tomar la primera fila visible
         .within(() => {
-          cy.get('.anticon-plus').click(); // Clic en el botón para crear un control de tierra
+          cy.get('.ant-table-row-expand-icon').click(); // Expandir la fila
         });
 
-      // 4. Rellenar el formulario de control de tierra con valores de la iteración actual
-      cy.get('#register-soil-control_ph').clear().type(datos.ph);
-      cy.get('#register-soil-control_humedad').clear().type(datos.humedad);
-      cy.get('#register-soil-control_temperatura').clear().type(datos.temperatura);
-      cy.get('#register-soil-control_observaciones').clear().type(datos.observaciones);
+      // 4. Expandir la sección del historial de controles de tierra
+      cy.get('[style="background-color: rgb(255, 255, 255); border-radius: 5px;"] > .ant-collapse-header').click();
+      cy.get('[aria-expanded="true"] > .ant-collapse-header-text').should('be.visible'); // Verificar que el historial esté visible
 
-      // 5. Guardar el nuevo control de tierra
-      cy.get('.ant-btn').click();
-
-      // 6. Verificar la notificación de éxito
-      cy.get('.ant-message-custom-content > :nth-child(2)').should('have.text', 'El control de tierra ha sido registrado exitosamente');
+      // 5. Verificación de detalles del historial de controles de tierra
+      cy.get('.ant-timeline-item-content > .ant-collapse > .ant-collapse-item > .ant-collapse-header')
+        .should('be.visible'); // Verificar que el historial de controles esté visible
 
     });
   });
