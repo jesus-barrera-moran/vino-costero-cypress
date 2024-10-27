@@ -25,6 +25,7 @@ describe('Caso de Uso 5 - Creación de Siembra en una Parcela', () => {
 
       // 4. Seleccionar la parcela para la siembra
       cy.get('#create-sowing_parcela').click();
+      cy.wait(1000);
       cy.get('.ant-select-item-option-active > .ant-select-item-option-content').click();
 
       // 5. Seleccionar el primer tipo de uva del dropdown
